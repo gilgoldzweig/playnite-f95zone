@@ -46,8 +46,17 @@ namespace F95ZoneMetadataProvider
             // Mismatched version, send notification!
             if (latestVersion != game.Version)
             {
-                _api.Notifications.Add(Guid.NewGuid().ToString(), $"Game update available: {game.Name}, link: {link.Url}, (Old Version: {game.Version}, New Version: {latestVersion})",
-                    /*"Game update available: " + game.Name + ", link: " + link.Url + " (Old Version: " + game.Version + ", New Version: " + latestVersion + ")",*/ NotificationType.Info);
+                Action action = () =>
+                {
+                    Process.Start(link.Url);
+                };
+                NotificationMessage notification = new NotificationMessage(
+                    Guid.NewGuid().ToString(),
+                    $"A new version found for: {game.Name}, link: {link.Url}, (Old Version: {game.Version}, New Version: {latestVersion})",
+                    NotificationType.Info,
+                    action
+                    );
+                _api.Notifications.Add(notification);
             }
         }
     }
